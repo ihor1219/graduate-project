@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>植物电信号数据分类</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div align="center">
+    <h1>植物电生理数据在线分类</h1>
+    <h3>请输入训练集所占比例(eg:0.8)：</h3>
+    <input type="text" id="ratio" name="ratio"/>
+    <button onclick="send()">开始分类</button>
+
+    <br><br><br>
+    <hr>
+    <h2 style="color: firebrick">分类结果</h2>
+    <table id="myTable" width="300">
+        <tr>
+            <th width="150">样本</th>
+            <th width="150">预测类别</th>
+        </tr>
+    </table>
+</div>
+</body>
+
+<script>
+    function send() {
+
+        var a =document.getElementById("ratio");
+        axios.get("/hello", {params: {
+            "ratio": a.value
+        }}).then(function (response) {
+
+            // a.value= response.data;
+            show(response.data);
+        })
+    }
+
+    function show(a){
+
+        // 清空表
+        var objTable1 = document.getElementById("myTable");
+        var length = objTable1.rows.length;
+
+        for (var i = 1; i<length; i++){
+            objTable1.deleteRow(i);
+        }
+
+        for (var i = 0; i < a.length-1; i++) {
+
+            var newTr = myTable.insertRow(i+1);  // 添加一行
+            newTr.style.background="#FFEFD5";
+            // 该行添加两单元格
+            var newTd0 = newTr.insertCell();
+            var newTd1 = newTr.insertCell();
+            newTd0.style.textAlign="center";
+            newTd1.style.textAlign="center";
+            // 填充单元格
+            newTd0.innerText = "样本"+(i+1);
+
+            if(a[i]==1){
+                newTd1.innerText = "DK961";
+            }
+            else{
+                newTd1.innerText = "Landon";
+            }
+
+        }
+    }
+</script>
+</html>
